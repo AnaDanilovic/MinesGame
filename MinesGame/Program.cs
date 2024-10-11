@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MinesGame
+﻿namespace MinesGame
 {
     class Program
     {

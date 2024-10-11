@@ -1,54 +1,53 @@
-﻿namespace MinesGame
+﻿namespace MinesGame;
+
+public class Position
 {
-    public class Position
+    public int X { get; private set; }
+    public int Y { get; private set; }
+
+    public Position(int x, int y)
     {
-        public int X { get; private set; }
-        public int Y { get; private set; }
+        X = x;
+        Y = y;
+    }
 
-        public Position(int x, int y)
+    public bool MoveUp()
+    {
+        if (X > 0)
         {
-            X = x;
-            Y = y;
+            X--;
+            return true;
         }
+        return false;
+    }
 
-        public bool MoveUp()
+    public bool MoveDown(int size)
+    {
+        if (X < size - 1)
         {
-            if (X > 0)
-            {
-                X--;
-                return true;
-            }
-            return false;
+            X++;
+            return true;
         }
+        return false;
+    }
 
-        public bool MoveDown(int size)
+    public bool MoveLeft()
+    {
+        if (Y > 0)
         {
-            if (X < size - 1)
-            {
-                X++;
-                return true;
-            }
-            return false;
+            Y--;
+            return true;
         }
+        return false;
+    }
 
-        public bool MoveLeft()
+    public bool MoveRight(int size)
+    {
+        if (Y < size - 1)
         {
-            if (Y > 0)
-            {
-                Y--;
-                return true;
-            }
-            return false;
+            Y++;
+            return true;
         }
-
-        public bool MoveRight(int size)
-        {
-            if (Y < size - 1)
-            {
-                Y++;
-                return true;
-            }
-            return false;
-        }
+        return false;
     }
 }
