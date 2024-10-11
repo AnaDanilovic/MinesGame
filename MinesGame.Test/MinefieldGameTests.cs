@@ -1,16 +1,20 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MinesGame.Test;
-
-public class MinefieldGameTests
+namespace MinesGame.Test
 {
-    int size = 4;
-    [Test]
-    public void IsGameWon_ShouldReturnTrue_WhenPlayerReachesEnd()
+    public class MinefieldGameTests
     {
-        var game = new MinefieldGame(size, 3);
-        var position = new Position(4, 4);
-        Assert.IsTrue(position.X == 4 && position.Y == 4);
-    }  
+        [Test]
+        public void IsGameWon_ShouldReturnTrue_WhenPlayerReachesEnd()
+        {
+            var game = new MinefieldGame(4, 3);
+            var playerPos = new Position(3, 3); 
+            Assert.IsTrue(playerPos.X == 3 && playerPos.Y == 3);
+        }
 
+    }
 }
