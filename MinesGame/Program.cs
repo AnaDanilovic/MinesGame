@@ -1,10 +1,22 @@
-﻿namespace MinesGame
+﻿using Microsoft.Extensions.DependencyInjection;
+using MinesGame.Interfaces;
+
+namespace MinesGame
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            MinefieldGame game = new MinefieldGame(4, 3); 
+            var serviceProvider = new ServiceCollection()
+           .AddSingleton<IGrid, Grid>()
+           .BuildServiceProvider();
+
+            var scope = serviceProvider.CreateScope();
+            var _grid = scope.ServiceProvider.GetRequiredService<IGrid>();
+            _grid.Size = 4;
+
+            var game = new MinefieldGame(_grid);
+            game.Lives = 3;
             game.Start();
         }
     }

@@ -1,18 +1,21 @@
-﻿namespace MinesGame;
+﻿using MinesGame.Interfaces;
 
-public class MinefieldGame
+namespace MinesGame;
+
+public class MinefieldGame 
 {
-    private readonly Grid _grid;
-    private int _lives;
+    public int Lives { get; set; }
+    private readonly IGrid _grid;
     private int _moves;
     private Position _position;
 
-    public MinefieldGame(int size, int lives)
+
+    public MinefieldGame(IGrid grid) 
     {
-        _grid = new Grid(size);
-        _lives = lives;
+        _grid = grid;
+        _grid.PlaceMines();
         _moves = 0;
-        _position = new Position(0, 0); 
+        _position = new Position(0, 0);
     }
 
     public void Start()
@@ -20,9 +23,9 @@ public class MinefieldGame
         Console.WriteLine("Welcome to the Mines game!");
         Console.WriteLine("Move from A1 to C4 without hitting mines.");
         Console.WriteLine("Use commands: 'up', 'down', 'left', 'right'.");
-        Console.WriteLine($"You have {_lives} lives.");
+        Console.WriteLine($"You have {Lives} lives.");
 
-        while (_lives > 0 && !IsGameWon())
+        while (Lives > 0 && !IsGameWon())
         {
             PrintStatus();
             try
@@ -33,11 +36,6 @@ public class MinefieldGame
                     if (MovePlayer(direction))
                     {
                         _moves++;
-                        if (_grid.HasMine(_position))
-                        {
-                            _lives--;
-                            Console.WriteLine("Boom! You hit a mine.");
-                        }
                     }
                     else
                     {
@@ -55,7 +53,7 @@ public class MinefieldGame
             }
         }
 
-        if (_lives == 0)
+        if (Lives == 0)
         {
             Console.WriteLine("Game Over. You've lost all your lives.");
         }
@@ -65,31 +63,49 @@ public class MinefieldGame
         }
     }
 
-    private bool MovePlayer(string direction)
+    public bool MovePlayer(string direction)
     {
+        bool moved = false;
         switch (direction)
         {
             case "up":
-                return _position.MoveUp();
+                moved = _position.MoveUp();
+                if (moved) CheckHasMine();
+                return moved;
             case "down":
-                return _position.MoveDown(_grid.Size);
+                moved = _position.MoveDown(_grid.Size);
+                if (moved) CheckHasMine();
+                return moved;
             case "left":
-                return _position.MoveLeft();
+                moved = _position.MoveLeft();
+                if (moved) CheckHasMine();
+                return moved;
             case "right":
-                return _position.MoveRight(_grid.Size);
+                moved = _position.MoveRight(_grid.Size);
+                if (moved) CheckHasMine();
+                return moved;
             default:
                 return false;
         }
     }
 
-    private bool IsGameWon()
+    public void CheckHasMine()
+    {
+        if (_grid.HasMine(_position))
+        {
+            Lives--;
+            Console.WriteLine("Boom! You hit a mine.");
+        }
+    }
+
+    public bool IsGameWon()
     {
         return _position.X == _grid.Size - 1 && _position.Y == _grid.Size - 1;
     }
 
     private void PrintStatus()
     {
-        Console.WriteLine($"You are at {PositionToChessNotation(_position)}. Lives: {_lives}, Moves: {_moves}");
+        Console.WriteLine($"You are at {PositionToChessNotation(_position)}. Lives: {Lives}, Moves: {_moves}");
     }
 
     private string PositionToChessNotation(Position position)

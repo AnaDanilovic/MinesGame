@@ -1,19 +1,15 @@
-﻿namespace MinesGame;
+﻿using MinesGame.Interfaces;
 
-public class Grid
+namespace MinesGame;
+
+public class Grid : IGrid
 {
-    private readonly bool[,] _mines;
-    public int Size { get; }
+    private bool[,] _mines;
+    public int Size { get; set; }
 
-    public Grid(int size)
+    public void PlaceMines()
     {
-        Size = size;
-        _mines = new bool[size, size];
-        PlaceMines();
-    }
-
-    private void PlaceMines()
-    {
+        _mines = new bool[Size, Size];
         Random random = new Random();
         int mineCount = Size; 
         for (int i = 0; i < mineCount; i++)
